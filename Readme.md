@@ -108,3 +108,5 @@ try {
   console.log((error as CustomError).message);
 }
 ```
+
+## 2-1 Interface, Types Vs Interface
