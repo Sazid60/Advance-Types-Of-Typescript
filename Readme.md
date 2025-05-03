@@ -482,3 +482,69 @@ const student2 = addCourseToStudent({
 });
 //
 ```
+
+## 2-6 Constrains In Typescript
+
+- Constrains Means Forcing Something. Its like we want to force some rules
+
+```ts
+const addCourseToStudent = <T>(student: T) => {
+  const course = "Next Level Web Dev";
+  return {
+    ...student,
+    course,
+  };
+};
+const student1 = addCourseToStudent({
+  name: "Sazid",
+  email: "sazid@gmail.com",
+  devType: "NLWD",
+}); // addCourseToStudent Is AUTOMATICALLY Inferring the types though we can explicitly define
+const student2 = addCourseToStudent({
+  name: "Kazid",
+  email: "kazid@gmail.com",
+  hasWatch: "Apple",
+});
+//
+```
+
+- There is a problem with this function, Its allowing all type of student data and its not protecting us for error
+
+```ts
+const student1 = addCourseToStudent({
+  emni: "Emni",
+});
+```
+
+- This is not right. We Want to set some rules that will not allow if specific properties are not given
+- Constrains comes up with a solution here. By using extends we can set some rules that some properties m ust me present inside the student object
+
+```ts
+// constrains IN tYPESCRIPT
+type Student = {
+  id: number;
+  name: string;
+  email: string;
+};
+const addCourseToStudent = <T extends Student>(student: T) => {
+  // this means T must should maintain the types of Student (we are setting rules)
+  const course = "Next Level Web Dev";
+  return {
+    ...student,
+    course,
+  };
+};
+
+const student1 = addCourseToStudent({
+  id: 123,
+  name: "Sazid",
+  email: "sazid@gmail.com",
+  devType: "NLWD",
+});
+const student2 = addCourseToStudent({
+  id: 123,
+  name: "Sazid",
+  email: "sazid@gmail.com",
+  finished: "BLWD",
+});
+```
