@@ -406,3 +406,79 @@ const richDeveloper: Developer<AppleWatch, YmamahBike> = {
 };
 //
 ```
+
+## 2-5 Generics With Functions
+
+- Generics in functions allow you to write flexible, reusable functions that work with different types without losing type safety. Instead of using a specific type, you define a placeholder type (commonly T) that will be replaced with the actual type when the function is called.
+
+```ts
+// A simple function that takes a string and returns an array of strings
+const createArray = (param: string): string[] => {
+  return [param];
+};
+
+const res1 = createArray("Bangladesh"); // ✅ Works, but only for strings
+
+// ❌ Not flexible – we cannot pass numbers, objects, or other types
+
+// ✅ To make the function dynamic, we use Generics
+// Syntax: <T> means we are defining a generic type T
+// The function will take a parameter of type T and return an array of T
+const createArrayWithGenerics = <T>(param: T): T[] => {
+  return [param];
+};
+
+// Define a custom type 'User'
+type User = {
+  id: number;
+  name: string;
+};
+
+// Example usage of the generic function:
+
+// res2: T is string => return type is string[]
+const res2 = createArrayWithGenerics<string>("Bangladesh"); // ["Bangladesh"]
+
+// res3: T is User => return type is User[]
+const res3 = createArrayWithGenerics<User>({ id: 222, name: "Nissso" });
+// [{ id: 222, name: "Nissso" }]
+
+// ✅ Explanation:
+// The generic function `createArrayWithGenerics` adapts to any type we pass in
+// - If we pass a string, it returns a string array
+// - If we pass a User object, it returns a User object array
+// This makes the function reusable for any data type
+
+// ❗ Even though TypeScript can infer the type,
+// we can explicitly define the generic type when we want more control or clarity.
+
+//    creating a tuple using generic function
+const createTupleWithGeneric = <X, Y>(param1: X, param2: Y): [X, Y] => {
+  return [param1, param2];
+};
+
+const res4 = createTupleWithGeneric<string, number>("Bangladesh", 1);
+const res5 = createTupleWithGeneric<number, User>(123, {
+  id: 222,
+  name: "Nissso",
+});
+
+const addCourseToStudent = <T>(student: T) => {
+  const course = "Next Level Web Dev";
+  return {
+    ...student,
+    course,
+  };
+};
+const student1 = addCourseToStudent({
+  name: "Sazid",
+  email: "sazid@gmail.com",
+  devType: "NLWD",
+}); // addCourseToStudent Is AUTOMATICALLY Inferring the types though we can explicitly define
+const student2 = addCourseToStudent({
+  name: "Kazid",
+  email: "kazid@gmail.com",
+  hasWatch: "Apple",
+});
+//
+```
