@@ -736,3 +736,203 @@ type HasTractor = CheckVehicle<"tractor">;
 type HasCar = CheckVehicle<"car">;
 //
 ```
+
+## 2-10 Mapped Types
+
+- Map returns array and before returning the array we can manipulate the data
+
+```ts
+const arrayOfNumbers: number[] = [1, 2, 3];
+
+//   const arrayOfStrings : string[] = ["1","2","3"]
+//  we wil do it using js map
+const arrayOfStrings: string[] = arrayOfNumbers.map((number) =>
+  number.toString()
+);
+console.log(arrayOfStrings);
+```
+
+- Ts map also do the same kind of thing almost
+
+```ts
+type AreaNumber = {
+  height: number;
+  width: number;
+};
+//   if we want to manually convert types into string
+type AreaString1 = {
+  height: string;
+  width: string;
+};
+
+type AreaString = {
+  // [key in "height" | "width"]: string;
+  //this is also not dynamic, this is hardcoded so we can use key in key of  key in basically doing the looping like map
+  [key in keyof AreaNumber]: string; // this is looping variable
+  // key in the looping happens like  takes the height and convert to string and then takes the width and converts it into string
+};
+
+//  obj["height"] ---> this is called lookup
+//    if we want to use ts mapped types
+type Height = AreaNumber["height"]; // lookup is as same as object and this will give the type of height
+
+//    suppose the scenario is like i have a variable and we want to define custom types
+//   making flexible using generics
+
+// T=> {height:string, width:number}
+//   [key in "height"] : T[key]
+type AreaString2<T> = {
+  // [key in keyof T]: string;
+  // we do not want to make all of them string we want to keep multiple type thats why this will not work
+
+  // T=> {height:string, width:number}
+  // key=>"height", key=>"width"
+  [key in keyof T]: T[key];
+  // we have use lookup here
+};
+
+const area1: AreaString2<{ height: string; width: number }> = {
+  height: "100",
+  width: 400,
+};
+```
+
+## 2-11 Utility types
+
+- Pick Types
+  1. Pick means picking something
+
+```ts
+//   pick
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+
+type Name = Pick<Person, "name">;
+//    we are picking the type of the name property from the person
+type NameAge = Pick<Person, "name" | "age">;
+//   picking both name and age type from the person
+```
+
+- Omit Types
+  1. It Means Skipping something
+
+```ts
+//    Omit Type
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+type ContactInfo = Omit<Person, "name" | "age">;
+//   This means use the person type and skip the name and age
+```
+
+- Required Types
+  1. This Means we will take the types properties and make a net type by keeping all of the types property required
+
+```ts
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+//    Required Types
+// This Means we will take the types properties and make all of the required
+type PersonRequired = Required<Person>;
+```
+
+- Partial Types
+  1.  Partial is Exactly opposite to required it makes all of them optional
+
+```ts
+//   Partial Types
+
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+type PersonPartial = Partial<Person>;
+```
+
+- Readonly Types
+  1. It like if we do not want to let the value change any time but it can be seen here readonly is used
+
+```ts
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+//    Readonly Type
+//  It like if we do not want to let the value change any time but it can be seen here readonly is used
+
+const person1: Person = {
+  name: "Mr.XY",
+  age: 200,
+  contactNo: "01911",
+};
+
+//   person1.age = "MRS.ANU"
+//  by using this we can change the VALUE
+
+// here read only works
+type PersonReadOnly = Readonly<Person>;
+const person2: PersonReadOnly = {
+  name: "Mr.XY",
+  age: 200,
+  contactNo: "01911",
+};
+
+// person2.name = "MRS.ANU"
+//  This will show Error
+```
+
+- Record Types
+  1.  if we want adding a key value pairs adds a dynamic type we will Use Record Type
+  2.  The Record type is a utility type used to create objects with specific keys and value types. It's great when you want to dynamically define key-value pairs.
+  3.  record comes with the solution like that if we add any value the type will be defied dynamically
+
+```ts
+//   Record Types
+//  if we want adding a key value pairs adds a dynamic type we will Use Record Type
+// The Record type is a utility type used to create objects with specific keys and value types. It's great when you want to dynamically define key-value pairs.
+type MyObj = {
+  a: string;
+  b: string;
+};
+
+const obj1: MyObj = {
+  a: "aa",
+  b: "bb",
+  // c: "cc", // this will not allow to add c since type of c is not defined
+};
+
+//   record comes with the solution like that if we add any value the type will be defied dynamically
+type MyObj2 = Record<string, string>;
+//   Record<keys type, values type >;
+const MyObj2: MyObj2 = {
+  a: "aa",
+  b: "bb",
+  c: "cc",
+};
+```
+
+- Suppose we have an empty object and in further we will have data here. to type guard the data we will use Record
+- We definitely know the keys of the object is always string and the values are uncertain so we will use the key value pair string, unknown
+
+```ts
+const emptyObject: Record<string, unknown> = {};
+
+emptyObject.name = "Sazid";
+emptyObject.age = 27;
+emptyObject.isUser = true;
+```
