@@ -50,7 +50,11 @@
   //    writing Generalized Object Is Not Right since we have values to check the types
 
   //   so we have to tell more specifically so the inside the array the objects property gets type checked
-  const user1: GenericArray1<{ name: string; age: number }> = [
+  type User = {
+    name: string;
+    age: number;
+  }; // Type or Interface both can be used
+  const user1: GenericArray1<User> = [
     { name: "sazid", age: 20 },
     { name: "Pazid", age: 20 },
   ];
