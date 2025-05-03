@@ -796,3 +796,143 @@ const area1: AreaString2<{ height: string; width: number }> = {
   width: 400,
 };
 ```
+
+## 2-11 Utility types
+
+- Pick Types
+  1. Pick means picking something
+
+```ts
+//   pick
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+
+type Name = Pick<Person, "name">;
+//    we are picking the type of the name property from the person
+type NameAge = Pick<Person, "name" | "age">;
+//   picking both name and age type from the person
+```
+
+- Omit Types
+  1. It Means Skipping something
+
+```ts
+//    Omit Type
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+type ContactInfo = Omit<Person, "name" | "age">;
+//   This means use the person type and skip the name and age
+```
+
+- Required Types
+  1. This Means we will take the types properties and make a net type by keeping all of the types property required
+
+```ts
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+//    Required Types
+// This Means we will take the types properties and make all of the required
+type PersonRequired = Required<Person>;
+```
+
+- Partial Types
+  1.  Partial is Exactly opposite to required it makes all of them optional
+
+```ts
+//   Partial Types
+
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+type PersonPartial = Partial<Person>;
+```
+
+- Readonly Types
+  1. It like if we do not want to let the value change any time but it can be seen here readonly is used
+
+```ts
+type Person = {
+  name: string;
+  age: number;
+  email?: string;
+  contactNo: string;
+};
+//    Readonly Type
+//  It like if we do not want to let the value change any time but it can be seen here readonly is used
+
+const person1: Person = {
+  name: "Mr.XY",
+  age: 200,
+  contactNo: "01911",
+};
+
+//   person1.age = "MRS.ANU"
+//  by using this we can change the VALUE
+
+// here read only works
+type PersonReadOnly = Readonly<Person>;
+const person2: PersonReadOnly = {
+  name: "Mr.XY",
+  age: 200,
+  contactNo: "01911",
+};
+
+// person2.name = "MRS.ANU"
+//  This will show Error
+```
+
+- Record Types
+  1.  if we want adding a key value pairs adds a dynamic type we will Use Record Type
+  2.  The Record type is a utility type used to create objects with specific keys and value types. It's great when you want to dynamically define key-value pairs.
+  3.  record comes with the solution like that if we add any value the type will be defied dynamically
+
+```ts
+//   Record Types
+//  if we want adding a key value pairs adds a dynamic type we will Use Record Type
+// The Record type is a utility type used to create objects with specific keys and value types. It's great when you want to dynamically define key-value pairs.
+type MyObj = {
+  a: string;
+  b: string;
+};
+
+const obj1: MyObj = {
+  a: "aa",
+  b: "bb",
+  // c: "cc", // this will not allow to add c since type of c is not defined
+};
+
+//   record comes with the solution like that if we add any value the type will be defied dynamically
+type MyObj2 = Record<string, string>;
+//   Record<keys type, values type >;
+const MyObj2: MyObj2 = {
+  a: "aa",
+  b: "bb",
+  c: "cc",
+};
+```
+
+- Suppose we have an empty object and in further we will have data here. to type guard the data we will use Record
+- We definitely know the keys of the object is always string and the values are uncertain so we will use the key value pair string, unknown
+
+```ts
+const emptyObject: Record<string, unknown> = {};
+
+emptyObject.name = "Sazid";
+emptyObject.age = 27;
+emptyObject.isUser = true;
+```
