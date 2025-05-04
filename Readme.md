@@ -153,7 +153,7 @@ const user2: User2 = {
 - Type alias can be use for both primitive and non-primitive
 - But Interface can be used for for object only means non-primitive
 
-- So For All Primitive we will use type alias and for all non-primitive we will use interface as well as type
+- So For All Primitive we will use type alias and for all non-primitive we will use interface 
 
 ```ts
 //   difference between type And interface
